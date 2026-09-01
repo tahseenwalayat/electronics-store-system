@@ -12,18 +12,20 @@ from models.user import User
 
 logger = logging.getLogger(__name__)
 
-# 10 Core System Modules
+# Core System Modules
 MODULES = [
-    {"key": "sales", "name": "Sales & POS", "description": "Process sales, receipts, and returns"},
-    {"key": "purchases", "name": "Purchases", "description": "Supplier purchases and return orders"},
-    {"key": "products", "name": "Products", "description": "Product catalog, pricing, and stock search"},
-    {"key": "stock_adjustment", "name": "Stock Adjustment", "description": "Manual inventory stock adjustments"},
-    {"key": "reports", "name": "Reports & Analytics", "description": "Sales, financial, and inventory analytics"},
+    {"key": "products", "name": "Products & Inventory", "description": "Product catalog, pricing, and stock search"},
+    {"key": "sales", "name": "Sales & POS", "description": "Process sales, receipts, and checkout"},
+    {"key": "purchases", "name": "Purchases", "description": "Supplier purchases and inbound inventory"},
     {"key": "customers", "name": "Customers", "description": "Customer directory and credit management"},
     {"key": "suppliers", "name": "Suppliers", "description": "Supplier profiles and purchase history"},
+    {"key": "returns", "name": "Returns & RMA", "description": "Customer and supplier returns management"},
     {"key": "warranty", "name": "Warranty Claims", "description": "Warranty claims and repair tracking"},
+    {"key": "reports", "name": "Reports & Analytics", "description": "Sales, financial, and inventory analytics"},
     {"key": "users", "name": "Users & Permissions", "description": "User accounts, roles, and access management"},
     {"key": "backup_restore", "name": "Backup / Restore", "description": "Database backup and restoration tools"},
+    {"key": "settings", "name": "Store Settings", "description": "Store profile, tax, and system configuration"},
+    {"key": "stock_adjustment", "name": "Stock Adjustment", "description": "Manual inventory stock adjustments"},
 ]
 
 ACTIONS = [
@@ -38,19 +40,28 @@ DEFAULT_ROLE_PERMISSIONS: Dict[str, Set[str]] = {
         f"{m['key']}.{a['key']}" for m in MODULES for a in ACTIONS
     },
     "manager": {
+        "products.view", "products.manage",
         "sales.view", "sales.manage",
         "purchases.view", "purchases.manage",
-        "products.view", "products.manage",
-        "stock_adjustment.view", "stock_adjustment.manage",
-        "reports.view", "reports.manage",
         "customers.view", "customers.manage",
         "suppliers.view", "suppliers.manage",
+        "returns.view", "returns.manage",
         "warranty.view", "warranty.manage",
+        "reports.view", "reports.manage",
+        "settings.view", "settings.manage",
+        "stock_adjustment.view", "stock_adjustment.manage",
     },
     "cashier": {
+        "products.view",
         "sales.view", "sales.manage",
         "customers.view", "customers.manage",
-        "products.view",  # Product search
+        "returns.view", "returns.manage",
+        "warranty.view",
+    },
+    "technician": {
+        "products.view",
+        "warranty.view", "warranty.manage",
+        "customers.view",
     },
 }
 

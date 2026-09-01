@@ -114,7 +114,13 @@ class MigrationRunner:
                     migration_sql = f.read()
 
                 cursor = conn.cursor()
-                cursor.executescript(migration_sql)
+                try:
+                    cursor.executescript(migration_sql)
+                except sqlite3.OperationalError as e:
+                    if "duplicate column name" in str(e).lower():
+                        logger.warning(f"Migration {filename} column already exists, skipping duplicate column error.")
+                    else:
+                        raise
                 self.record_migration(conn, filename)
                 newly_applied.append(filename)
                 logger.info(f"Applied migration: {filename}")

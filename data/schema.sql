@@ -87,9 +87,10 @@ CREATE TABLE IF NOT EXISTS brands (
 
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sku TEXT NOT NULL UNIQUE,
+    sku TEXT UNIQUE,
     barcode TEXT UNIQUE,
     name TEXT NOT NULL,
+    model TEXT,
     description TEXT,
     category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
     brand_id INTEGER REFERENCES brands(id) ON DELETE SET NULL,
